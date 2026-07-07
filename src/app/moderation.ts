@@ -1,14 +1,3 @@
-// ─── Moderación de contenido ────────────────────────────────────────────────
-// Lista de términos bloqueados para el formulario. Editá este array para
-// agregar o quitar palabras según necesites. No hace falta reiniciar nada,
-// con guardar el archivo y volver a compilar/deployar alcanza.
-//
-// IMPORTANTE: esta misma lista existe DUPLICADA en el Apps Script (Code.gs)
-// que hace de backend. Si agregás una palabra acá, agregala también allá,
-// porque la validación que realmente importa (la que no se puede saltear)
-// es la del servidor. Esta de acá es solo para avisarle al usuario al toque,
-// sin esperar la respuesta del servidor.
-
 export const BLOCKED_WORDS: string[] = [
   // Insultos y vulgaridades comunes (agregá las que necesites)
   "boludo",
@@ -35,7 +24,6 @@ export const BLOCKED_WORDS: string[] = [
   "violador",
   "pedofilo",
   "pedófilo",
-  // Inglés
   "fuck",
   "shit",
   "bitch",
@@ -43,17 +31,24 @@ export const BLOCKED_WORDS: string[] = [
   "nigga",
   "retard",
   "faggot",
-  // Spam / troll típico
   "http://",
   "https://",
   "www.",
   ".com",
   "onlyfans",
   "descargar gratis",
+  "gordo",
+  "hijo de puta", "cocaina",
+  "joputa", "hijoputa", "pene", "vagina", "masturbarse", "gay", "gey", "gai", "gei",
+  "pajero", "pajear", "squirt", "hot", "cachondo", "poronga", "autista", "coño", "conio",
+  "escupeme", "escupime", "tetonas", "tetas", "teticas", "sexo", "putito", "putazo",
+  "pinga", "pingo", "picha", "nalga", "porno", "polla", "follar", "follame", "dick", "culos",
+  "nepe", "pija", "chupa pija", "chupame el pico", "chupa pico", "chupapi", "putero", "consolador",
+  "cojones", "teton", "cock", "cariñosas", "violacion", "weon", "hijo de tu chingada madre",
+  "huevon", "verga", "pichula", "hazme un hijo", "pussy", "punto g", "qlo", "masturba", "joto",
+  "tula", "chupamela", "gordo de mierda", "gilipollas", "hdp", "hpta", "guaton", "me corro", "vibrador", "gemir", "gemido", "nudes", "dildo"
 ];
 
-// Normaliza texto para que no se puedan esquivar los filtros con acentos,
-// mayúsculas, espacios raros o reemplazos tipo leetspeak (@ por a, 0 por o, etc).
 function normalize(input: string): string {
   return input
     .toLowerCase()
