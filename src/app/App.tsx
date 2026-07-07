@@ -5,7 +5,7 @@ import { checkBlockedWords } from "./moderation";
 
 const DEADLINE = new Date("2026-07-10T18:30:00");
 
-const API_URL = "PEGA_ACA_TU_URL_DE_APPS_SCRIPT";
+const API_URL = "https://script.google.com/macros/s/AKfycbyPSqktTTnp4-P8_ioz-6FG_13HCJGctRw97OQJNF3_mM4Kae1j4Ayq-QgJ7bT7VWNGPQ/exec";
 // ────────────────────────────────────────────────────────────────────────────
 
 interface Message {
