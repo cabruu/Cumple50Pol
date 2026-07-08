@@ -183,8 +183,7 @@ function ImageLightbox({ msg, onClose }: { msg: Message; onClose: () => void }) 
           className="w-full max-h-[70vh] object-contain rounded-sm bg-black"
         />
 
-        <div className="flex items-center justify-between gap-4 flex-wrap">
-          <p className="text-sm text-white/70 flex-1 min-w-[200px]">{msg.text}</p>
+        <div className="flex justify-center">
           <button
             type="button"
             onClick={handleDownload}
