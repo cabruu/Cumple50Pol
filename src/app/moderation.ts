@@ -46,8 +46,7 @@ export const BLOCKED_WORDS: string[] = [
   "nepe", "pija", "chupa pija", "chupame el pico", "chupa pico", "chupapi", "putero", "consolador",
   "cojones", "teton", "cock", "cariñosas", "violacion", "weon",
   "huevon", "verga", "pichula", "hazme un hijo", "pussy", "punto g", "qlo", "masturba", "joto",
-  "tula", "chupamela", "gilipollas", "hdp", "hpta", "guaton", "me corro",
-  "pete", "vibrador", "gemir", "gemido", "nudes", "dildo"
+  "tula", "chupamela", "gilipollas", "hdp", "hpta", "guaton", "me corro", "vibrador", "gemir", "gemido", "nudes", "dildo"
 ];
 
 function normalize(input: string): string {
