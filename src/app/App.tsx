@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Film, Upload, X, Send, Camera, Clapperboard, Play, Loader2 } from "lucide-react";
+import { Film, Upload, X, Send, Camera, Clapperboard, Play, Loader2, Download } from "lucide-react";
 import "./cinema.css";
 import { checkBlockedWords } from "./moderation";
 
@@ -69,20 +69,29 @@ function CountdownUnit({ value, label }: { value: number; label: string }) {
   );
 }
 
-function MessageCard({ msg, index }: { msg: Message; index: number }) {
+function MessageCard({ msg, index, onImageClick }: { msg: Message; index: number; onImageClick?: (msg: Message) => void }) {
   return (
     <div
       className="card-enter bg-card border border-border rounded-sm p-5 flex flex-col gap-3 hover:border-primary/25 transition-colors duration-300"
       style={{ animationDelay: `${index * 0.06}s` }}
     >
       {msg.image && (
-        <div className="w-full aspect-video overflow-hidden rounded-sm bg-muted">
+        <button
+          type="button"
+          onClick={() => onImageClick?.(msg)}
+          className="w-full aspect-video overflow-hidden rounded-sm bg-muted cursor-zoom-in group relative"
+        >
           <img
             src={msg.image}
             alt={`Imagen de ${msg.username}`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-        </div>
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity font-mono-tc text-[10px] uppercase tracking-[0.2em] text-white bg-black/60 px-3 py-1.5 rounded-sm">
+              Ver imagen
+            </span>
+          </div>
+        </button>
       )}
       <div className="flex items-center gap-2">
         <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/25 flex items-center justify-center shrink-0">
@@ -109,9 +118,92 @@ function MessageCard({ msg, index }: { msg: Message; index: number }) {
   );
 }
 
+// ─── Visor de imagen ampliada, con descarga ─────────────────────────────────
+function ImageLightbox({ msg, onClose }: { msg: Message; onClose: () => void }) {
+  const [downloading, setDownloading] = useState(false);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const handleDownload = async () => {
+    if (!msg.image) return;
+    setDownloading(true);
+    try {
+      // Traemos la imagen como blob para forzar la descarga en vez de que
+      // el navegador la abra en una pestaña nueva (pasa con links externos,
+      // como los de Google Drive).
+      const res = await fetch(msg.image);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${msg.username}-cumple-pol.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      // Si falla el fetch (por CORS u otro motivo), como último recurso
+      // abrimos la imagen en una pestaña nueva para que la guarden a mano.
+      window.open(msg.image, "_blank");
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex flex-col items-center justify-center p-4 sm:p-8"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-3xl flex flex-col gap-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between">
+          <span className="font-mono-tc text-xs uppercase tracking-[0.2em] text-white/80">
+            De {msg.username}
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-white/70 hover:text-white transition-colors"
+            aria-label="Cerrar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <img
+          src={msg.image}
+          alt={`Imagen de ${msg.username}`}
+          className="w-full max-h-[70vh] object-contain rounded-sm bg-black"
+        />
+
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <p className="text-sm text-white/70 flex-1 min-w-[200px]">{msg.text}</p>
+          <button
+            type="button"
+            onClick={handleDownload}
+            disabled={downloading}
+            className="flex items-center gap-2 bg-primary text-primary-foreground font-mono-tc text-xs uppercase tracking-[0.2em] px-5 py-3 rounded-sm hover:bg-primary/85 disabled:opacity-60 transition-all duration-200 shrink-0"
+          >
+            {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+            {downloading ? "Descargando..." : "Descargar imagen"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Vista especial para el streamer ────────────────────────────────────────
 function StreamerView({ messages, loading, loadError }: { messages: Message[]; loading: boolean; loadError: string | null }) {
   const [revealed, setRevealed] = useState(false);
+  const [lightboxMsg, setLightboxMsg] = useState<Message | null>(null);
 
   if (loading) {
     return (
@@ -213,12 +305,14 @@ function StreamerView({ messages, loading, loadError }: { messages: Message[]; l
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
               {messages.map((msg, i) => (
-                <MessageCard key={msg.id} msg={msg} index={i} />
+                <MessageCard key={msg.id} msg={msg} index={i} onImageClick={setLightboxMsg} />
               ))}
             </div>
           </div>
         )}
       </section>
+
+      {lightboxMsg && <ImageLightbox msg={lightboxMsg} onClose={() => setLightboxMsg(null)} />}
 
       <footer className="relative z-20 border-t border-border py-6 px-6 text-center mt-12">
         <span className="font-mono-tc text-[10px] uppercase tracking-[0.22em] text-muted-foreground/40">
@@ -302,8 +396,8 @@ export default function App() {
     if (!username.trim()) { setError("Necesitas poner tu usuario de Twitch."); return; }
     if (!text.trim()) { setError("El mensaje no puede estar vacío."); return; }
 
-    // Chequeo de palabras bloqueadas.
-    // La validación que de verdad importa la hace el servidor
+    // Chequeo de palabras bloqueadas del lado del cliente (feedback instantáneo).
+    // La validación que de verdad importa la hace el servidor (Apps Script).
     const modCheck = checkBlockedWords(username, text);
     if (modCheck.blocked) {
       setError("Tu mensaje contiene una palabra no permitida. Editalo y volvé a intentar.");
