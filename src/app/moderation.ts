@@ -12,8 +12,8 @@ export const BLOCKED_WORDS: string[] = [
   "concha",
   "cornudo",
   "trolo",
-  "negro de mierda",
-  "sudaca",
+  "negro",
+  "gordo",
   "retrasado",
   "retardado",
   "subnormal",
@@ -39,14 +39,15 @@ export const BLOCKED_WORDS: string[] = [
   "descargar gratis",
   "gordo",
   "hijo de puta", "cocaina",
-  "joputa", "hijoputa", "pene", "vagina", "masturbarse", "gay", "gey", "gai", "gei",
+  "joputa", "hijoputa", "pene", "vagina", "masturbarse", "gay", "gey", "gei",
   "pajero", "pajear", "squirt", "hot", "cachondo", "poronga", "autista", "coño", "conio",
   "escupeme", "escupime", "tetonas", "tetas", "teticas", "sexo", "putito", "putazo",
   "pinga", "pingo", "picha", "nalga", "porno", "polla", "follar", "follame", "dick", "culos",
   "nepe", "pija", "chupa pija", "chupame el pico", "chupa pico", "chupapi", "putero", "consolador",
-  "cojones", "teton", "cock", "cariñosas", "violacion", "weon", "hijo de tu chingada madre",
+  "cojones", "teton", "cock", "cariñosas", "violacion", "weon",
   "huevon", "verga", "pichula", "hazme un hijo", "pussy", "punto g", "qlo", "masturba", "joto",
-  "tula", "chupamela", "gordo de mierda", "gilipollas", "hdp", "hpta", "guaton", "me corro", "vibrador", "gemir", "gemido", "nudes", "dildo"
+  "tula", "chupamela", "gilipollas", "hdp", "hpta", "guaton", "me corro",
+  "pete", "vibrador", "gemir", "gemido", "nudes", "dildo"
 ];
 
 function normalize(input: string): string {
