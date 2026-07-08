@@ -5,7 +5,7 @@ import { checkBlockedWords } from "./moderation";
 
 const DEADLINE = new Date("2026-07-10T21:00:00");
 
-const API_URL = "https://script.google.com/macros/s/AKfycbx-08dCFZd2gwQMchxupGMhm2qUOi5jzcScfEWoK_buZrp2VFxf5UEENX_C0j6q7NzcVA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzGkGxJ588L7YV7fcMWG-viTRiYxA2MKHc-40Ujo3-5SkiExsvZGtbBqFvaId0_rsve2Q/exec";
 // ────────────────────────────────────────────────────────────────────────────
 
 interface Message {
