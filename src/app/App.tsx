@@ -3,9 +3,9 @@ import { Film, Upload, X, Send, Camera, Clapperboard, Play, Loader2, Download } 
 import "./cinema.css";
 import { checkBlockedWords } from "./moderation";
 
-const DEADLINE = new Date("2025-07-10T18:30:00");
+const DEADLINE = new Date("2026-07-10T21:00:00");
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzaVE--pmL22of1rvDsPZou5LzztQPB_Q3ekFAyElj3fpECGm5My6YRUQI_chfYXp9L7A/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx-08dCFZd2gwQMchxupGMhm2qUOi5jzcScfEWoK_buZrp2VFxf5UEENX_C0j6q7NzcVA/exec";
 // ────────────────────────────────────────────────────────────────────────────
 
 interface Message {
